@@ -1,19 +1,32 @@
-const Searchbar = () => {
+import { Formik, Form, Field } from 'formik';
+
+const Searchbar = ({ onFormSubmit }) => {
+  const handleSubmit = (values, actions) => {
+    onFormSubmit(values);
+    actions.setSubmitting(false);
+    // actions.resetForm();
+  };
+
   return (
     <header className="searchbar">
-      <form className="form">
-        <button type="submit" className="button">
-          <span className="button-label">Search</span>
-        </button>
+      <Formik initialValues={{ searchInput: '' }} onSubmit={handleSubmit}>
+        {({ isSubmitting }) => (
+          <Form className="form">
+            <button type="submit" disabled={isSubmitting} className="button">
+              <span className="button-label">Search</span>
+            </button>
 
-        <input
-          className="input"
-          type="text"
-          autocomplete="off"
-          autofocus
-          placeholder="Search images and photos"
-        />
-      </form>
+            <Field
+              name="searchInput"
+              className="input"
+              type="text"
+              autoComplete="off"
+              autoFocus
+              placeholder="Search images and photos"
+            />
+          </Form>
+        )}
+      </Formik>
     </header>
   );
 };

@@ -30,7 +30,7 @@ export default class Modal extends Component {
 
   render() {
     return createPortal(
-      <div className="overlay">
+      <div className="overlay" onClick={this.handleBackdropClick}>
         <div class="modal">
           <img src="" alt="" />
         </div>

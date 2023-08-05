@@ -1,27 +1,34 @@
 import { Component } from 'react';
 import Searchbar from './Searchbar';
 import ImageGallery from './ImageGallery';
-import Button from './Button';
-import Modal from './Modal/Modal.jsx';
+// import Button from './Button';
+// import Modal from './Modal/Modal.jsx';
+// import * as API from '../services/api';
 
 export class App extends Component {
   state = {
-    showModal: false,
+    searchQuery: null,
+
+    // showModal: false,
   };
 
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({ showModal: !showModal }));
+  handleSearch = formData => {
+    this.setState({ searchQuery: formData });
   };
+
+  // toggleModal = () => {
+  //   this.setState(({ showModal }) => ({ showModal: !showModal }));
+  // };
 
   render() {
-    const { showModal } = this.state;
+    const { searchQuery } = this.state;
 
     return (
       <>
-        {showModal && <Modal onClose={this.toggleModal} />}
-        <Searchbar />
-        <ImageGallery />
-        <Button />
+        {/* {showModal && <Modal onClose={this.toggleModal} />} */}
+        <Searchbar onFormSubmit={this.handleSearch} />
+        {searchQuery && <ImageGallery searchQuery={searchQuery} />}
+        {/* <Button /> */}
       </>
     );
   }
