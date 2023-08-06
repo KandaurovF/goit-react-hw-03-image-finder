@@ -19,6 +19,6 @@ export const getPhotosByQuery = async searchQuery => {
   return response.data.hits;
 };
 
-export default {
-  getPhotosByQuery,
-};
+// export default {
+//   getPhotosByQuery,
+// };

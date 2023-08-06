@@ -36,10 +36,14 @@ class ImageGallery extends Component {
     }
 
     return (
-      <ul className="gallery">
+      <ul className="ImageGallery">
         {images.map(image => (
-          <li key={image.id} className="gallery-item">
-            <img src={image.url} alt={image.id} />
+          <li key={image.id} className="ImageGalleryItem">
+            <img
+              className="ImageGalleryItem-image"
+              src={image.url}
+              alt={image.id}
+            />
           </li>
         ))}
         {<ImageGalleryItem />}
