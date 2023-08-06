@@ -2,9 +2,9 @@ import { Formik, Form, Field } from 'formik';
 
 const Searchbar = ({ onFormSubmit }) => {
   const handleSubmit = (values, actions) => {
-    onFormSubmit(values);
+    onFormSubmit(values.searchInput);
     actions.setSubmitting(false);
-    // actions.resetForm();
+    actions.resetForm();
   };
 
   return (

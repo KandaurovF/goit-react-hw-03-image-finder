@@ -1,35 +1,53 @@
-import { Component } from 'react';
-import Searchbar from './Searchbar';
-import ImageGallery from './ImageGallery';
-// import Button from './Button';
-// import Modal from './Modal/Modal.jsx';
-// import * as API from '../services/api';
+import React, { Component } from 'react';
+import Searchbar from './Searchbar/Searchbar';
+import ImageGallery from './ImageGallery/ImageGallery';
+import Button from './Button/Button';
+import Modal from './Modal/Modal';
 
 export class App extends Component {
   state = {
     searchQuery: null,
-
-    // showModal: false,
+    page: 1,
+    showModal: false,
+    selectedImageURL: '',
   };
 
-  handleSearch = formData => {
-    this.setState({ searchQuery: formData });
+  handleSearch = searchInput => {
+    this.setState({ searchQuery: searchInput });
   };
 
-  // toggleModal = () => {
-  //   this.setState(({ showModal }) => ({ showModal: !showModal }));
-  // };
+  handleLoadMore = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+  };
+
+  toggleModal = imageURL => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+      selectedImageURL: imageURL,
+    }));
+  };
 
   render() {
-    const { searchQuery } = this.state;
+    const { searchQuery, page, showModal, selectedImageURL } = this.state;
 
     return (
-      <>
-        {/* {showModal && <Modal onClose={this.toggleModal} />} */}
+      <div className="App">
+        {showModal && (
+          <Modal imageURL={selectedImageURL} onClose={this.toggleModal} />
+        )}
         <Searchbar onFormSubmit={this.handleSearch} />
-        {searchQuery && <ImageGallery searchQuery={searchQuery} />}
-        {/* <Button /> */}
-      </>
+        {searchQuery && (
+          <ImageGallery
+            key={page}
+            searchQuery={searchQuery}
+            page={page}
+            onImageClick={this.toggleModal}
+          />
+        )}
+        <Button onClick={this.handleLoadMore} isShown={searchQuery !== null} />
+      </div>
     );
   }
 }
+
+export default App;

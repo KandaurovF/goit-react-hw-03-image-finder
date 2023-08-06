@@ -1,18 +1,18 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { createPortal } from 'react-dom';
 
 const modalRoot = document.querySelector('#modal-root');
 
 export default class Modal extends Component {
   componentDidMount() {
-    window.addEventListener('keydown', this.hendleKeyDown);
+    window.addEventListener('keydown', this.handleKeyDown);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.hendleKeyDown);
+    window.removeEventListener('keydown', this.handleKeyDown);
   }
 
-  hendleKeyDown = e => {
+  handleKeyDown = e => {
     if (e.code === 'Escape') {
       this.props.onClose();
     }
@@ -29,10 +29,12 @@ export default class Modal extends Component {
   };
 
   render() {
+    const { imageURL } = this.props;
+
     return createPortal(
       <div className="overlay" onClick={this.handleBackdropClick}>
-        <div class="modal">
-          <img src="" alt="" />
+        <div className="modal">
+          <img src={imageURL} alt="" />
         </div>
       </div>,
       modalRoot

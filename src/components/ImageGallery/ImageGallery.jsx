@@ -1,6 +1,7 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { getPhotosByQuery } from 'services/api';
-import ImageGalleryItem from 'components/ImageGalleryItem';
+import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
+import Loader from '../Loader/Loader';
 
 class ImageGallery extends Component {
   state = {
@@ -9,13 +10,26 @@ class ImageGallery extends Component {
     error: null,
   };
 
-  async componentDidMount() {
-    const { searchQuery } = this.props;
+  componentDidMount() {
+    this.fetchImages();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { page } = this.state;
+    if (prevState.page !== page) {
+      this.fetchImages();
+    }
+  }
+
+  async fetchImages() {
+    const { searchQuery, page } = this.props;
+    this.setState({ isLoading: true });
 
     try {
-      this.setState({ isLoading: true });
-      const images = await getPhotosByQuery(searchQuery);
-      this.setState({ images });
+      const images = await getPhotosByQuery(searchQuery, page);
+      this.setState(prevState => ({
+        images: [...prevState.images, ...images],
+      }));
     } catch (error) {
       console.log(error.message);
       this.setState({ error });
@@ -24,11 +38,15 @@ class ImageGallery extends Component {
     }
   }
 
+  handleImageClick = imageURL => {
+    console.log('Image clicked:', imageURL);
+  };
+
   render() {
     const { images, isLoading, error } = this.state;
 
     if (isLoading) {
-      return <div>Loading...</div>;
+      return <Loader />;
     }
 
     if (error) {
@@ -38,15 +56,13 @@ class ImageGallery extends Component {
     return (
       <ul className="ImageGallery">
         {images.map(image => (
-          <li key={image.id} className="ImageGalleryItem">
-            <img
-              className="ImageGalleryItem-image"
-              src={image.url}
-              alt={image.id}
-            />
-          </li>
+          <ImageGalleryItem
+            key={image.id}
+            webformatURL={image.webformatURL}
+            tags={image.tags}
+            onClick={this.handleImageClick}
+          />
         ))}
-        {<ImageGalleryItem />}
       </ul>
     );
   }
