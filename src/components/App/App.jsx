@@ -26,8 +26,9 @@ export default class App extends Component {
       const totalPages = Math.ceil(data.totalHits / 12);
       if (data.hits.length === 0) {
         toast.error(
-          'Sorry! There are no images matching your search query. Try again.'
+          'Sorry, there are no images matching to your search query!'
         );
+        return;
       }
 
       this.setState(({ hits }) => ({
@@ -36,13 +37,13 @@ export default class App extends Component {
       }));
 
       if (page === 1) {
-        toast.success(`Wonderful! We found ${data.totalHits} images!`);
+        toast.success(`We found ${data.totalHits} images!`);
       } else {
         setTimeout(() => this.scroll(), 100);
       }
 
       if (page >= totalPages) {
-        toast.info('Sorry! This is the end of search results! Ok');
+        toast.info('Sorry, there is no matches!');
       }
     } catch (error) {
       this.setState({ isError: true, Error });
